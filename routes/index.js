@@ -3,7 +3,18 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  const data = {
+    stuff: 'abc'
+  };
+  const vueOptions = {
+    head: {
+      title: 'Scrape your stuff',
+      meta: [
+        { property:'og:title', content: 'Scrape'},
+      ]
+    }
+  }
+  res.renderVue('index', data, vueOptions);
 });
 
 module.exports = router;
