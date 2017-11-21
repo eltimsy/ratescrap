@@ -10,10 +10,22 @@ router.get('/', function(req, res, next) {
 
   request(url, function(error, response, html) {
     if(!error) {
+      console.log('in')
       let $ = cheerio.load(html);
 
       let doctor, total, rating;
       let json = {doctor: "", total: "", rating: ""};
+      // console.log($)
+      console.log($('title').html())
+      console.log($('.review-count.js-profile-scroll-link').text())
+      console.log($('.provider-rating-score').text())
+      // $('.header').filter(function() {
+      //   var data = $(this);
+
+      //   title = data.children().first().text();
+      //   json.doctor = title;
+      // })
+      console.log(json)
     }
   });
   const data = {
