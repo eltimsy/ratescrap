@@ -35,6 +35,7 @@ router.get('/', function(req, res, next) {
     head: {
       title: 'Scrape your stuff',
       meta: [
+        { script: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.8/vue.min.js' },
         { property:'og:title', content: 'Scrape'},
       ]
     }
