@@ -2,11 +2,27 @@
   <div>
     <h1>Rate Scrapping Fun</h1>
     <form method=get v-on:submit.prevent="getData()">
-      <input v-model="doctor" placeholder="doctor Name">
-      <input type=submit value=Submit>
+      <label>Doctor Name</label>
+      <input class="form-control" v-model="doctor" placeholder="doctor Name"><br>
+      <input class="btn btn-warning" type=submit value=Submit>
     </form>
+    <br>
     <div>
-      {{ this.values.doctor }}
+      <h3>Health Grades</h3>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>Doctor</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ this.values.doctor }}</td>
+            <td>{{ this.values.rating }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>

@@ -4,7 +4,6 @@ var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 
-/* GET users listing. */
 router.get('/', function(req, res, next) {
   const url = 'https://www.healthgrades.com/physician/dr-emefre-udo-yp98t';
   console.log(req.query)
@@ -16,7 +15,6 @@ router.get('/', function(req, res, next) {
       console.log('in')
       let $ = cheerio.load(html);
 
-      // console.log($)
       json.doctor = $('title').html()
       json.total = $('.review-count.js-profile-scroll-link').text()
       json.rating = $('.provider-rating-score').text()
