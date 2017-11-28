@@ -8,6 +8,7 @@ var expressVue = require('express-vue');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var doctorAPI = require('./routes/doctorAPI');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/doctorapi', doctorAPI);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
