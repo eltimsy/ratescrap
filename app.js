@@ -11,21 +11,23 @@ const sequelize = new Sequelize('postgres://localhost:5432/ttse', { operatorsAli
 var index = require('./routes/index');
 var users = require('./routes/users');
 var doctorAPI = require('./routes/doctorAPI');
+const secrets = require('./config.js');
 
 var app = express();
 
 // view engine setup
 const vueOptions = {
-    rootPath: path.join(__dirname, 'views'),
-    layout: {
-        start: '<div id="app">',
-        end: '</div>'
-    }
+  rootPath: path.join(__dirname, 'views'),
+  layout: {
+    start: '<div id="app">',
+    end: '</div>'
+  }
 };
 const expressVueMiddleware = expressVue.init(vueOptions);
 app.use(expressVueMiddleware);
 
 app.set('sequelize', sequelize)
+app.set('secrets', secrets)
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
