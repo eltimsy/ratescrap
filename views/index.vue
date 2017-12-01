@@ -14,12 +14,14 @@
           <tr>
             <th>Doctor</th>
             <th>Rating</th>
+            <th>URL</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{{ this.values.doctor }}</td>
             <td>{{ this.values.rating }}</td>
+            <td>{{ this.values.url }}</td>
           </tr>
         </tbody>
       </table>

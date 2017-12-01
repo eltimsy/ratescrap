@@ -1,23 +1,17 @@
 var express = require('express');
-var request = require('request');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
   const sequelize = req.app.get('sequelize')
   const secrets = req.app.get('secrets')
-  sequelize
-    .authenticate()
-    .then(() => {
-      console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-      console.error('Unable to connect to the database:', err);
-    });
-  googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=john+wick+healthgrades`
-  request(googleURL, function (error, response, body) {
-    console.log(error);
-    console.log('body:', body);
-  })
+  // sequelize
+  //   .authenticate()
+  //   .then(() => {
+  //     console.log('Connection has been established successfully.');
+  //   })
+  //   .catch(err => {
+  //     console.error('Unable to connect to the database:', err);
+  //   });
   const data = {
     stuff: 'abc'
   };
