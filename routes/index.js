@@ -1,9 +1,30 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
+var request = require('request');
+const rp = require('request-promise');
+var cheerio = require('cheerio');
 
 router.get('/', function(req, res, next) {
   const sequelize = req.app.get('sequelize')
   const secrets = req.app.get('secrets')
+  let url = 'https://www.vitals.com/doctors/Dr_Kenneth_Alper.html'
+  // rp(url)
+  //   .then(function(data) {
+  //     let json = {doctor: "", total: "", rating: "", url: url};
+
+  //     console.log('in')
+  //     let $ = cheerio.load(data);
+
+  //     json.doctor = $('title').html()
+  //     json.total = $('.rating-links').text()
+  //     json.rating = $('.rating-text').text()
+
+  //     console.log(json)
+  //   })
+  //   .catch(function (err) {
+  //     console.log(err)
+  //   })
   // sequelize
   //   .authenticate()
   //   .then(() => {
