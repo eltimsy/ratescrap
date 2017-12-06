@@ -8,20 +8,22 @@
     </form>
     <br>
     <div>
-      <h3>Health Grades</h3>
+      <h3>List of Ratings</h3>
       <table class="table">
         <thead class="thead-dark">
           <tr>
             <th>Doctor</th>
             <th>Rating</th>
+            <th>Count</th>
             <th>URL</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{{ this.values.doctor }}</td>
-            <td>{{ this.values.rating }}</td>
-            <td>{{ this.values.url }}</td>
+          <tr v-for="value in values">
+            <td>{{ value.doctor }}</td>
+            <td>{{ value.rating }}</td>
+            <td>{{ value.total }}</td>
+            <td>{{ value.url }}</td>
           </tr>
         </tbody>
       </table>

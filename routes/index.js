@@ -8,7 +8,6 @@ var cheerio = require('cheerio');
 router.get('/', function(req, res, next) {
   const sequelize = req.app.get('sequelize')
   const secrets = req.app.get('secrets')
-  let url = 'https://www.vitals.com/doctors/Dr_Kenneth_Alper.html'
   // rp(url)
   //   .then(function(data) {
   //     let json = {doctor: "", total: "", rating: "", url: url};

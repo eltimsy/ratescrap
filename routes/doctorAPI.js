@@ -72,7 +72,7 @@ router.get('/', function(req, res, next) {
   // });
   hg.then((resolve) => {
     console.log(json);
-    // res.send(JSON.stringify(json));
+    res.send(JSON.stringify(json));
   })
   .catch((error) => {
     console.log(error);
