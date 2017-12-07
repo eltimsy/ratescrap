@@ -5,25 +5,22 @@ var request = require('request');
 const rp = require('request-promise');
 var cheerio = require('cheerio');
 
+
 router.get('/', function(req, res, next) {
   const sequelize = req.app.get('sequelize')
   const secrets = req.app.get('secrets')
-  // rp(url)
-  //   .then(function(data) {
-  //     let json = {doctor: "", total: "", rating: "", url: url};
 
-  //     console.log('in')
-  //     let $ = cheerio.load(data);
-
-  //     json.doctor = $('title').html()
-  //     json.total = $('.rating-links').text()
-  //     json.rating = $('.rating-text').text()
-
-  //     console.log(json)
+  // let googleHGURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=Bruce Hoffman dentist`
+  // rp(googleHGURL)
+  //   .then(function(html) {
+  //     let data = JSON.parse(html)
+  //     for(let item of data.items) {
+  //       console.log(item.link)
+  //     }
   //   })
-  //   .catch(function (err) {
-  //     console.log(err)
+  //   .catch(function(error) {
   //   })
+
   // sequelize
   //   .authenticate()
   //   .then(() => {

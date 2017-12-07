@@ -9,21 +9,31 @@ var cheerio = require('cheerio');
 router.get('/', function(req, res, next) {
   const secrets = req.app.get('secrets')
   let url = '';
-  const hgDoc = `${req.query.doctor}+healthgrades`
-  let googleHGURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${hgDoc}`
-  const vDoc = `www.vitals.com+${req.query.doctor}`
-  let googleVURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${vDoc}`
-  let json = []
-  console.log(googleHGURL)
-  console.log(googleVURL)
+  let vitals = [];
+  let ratemds = [];
+  let healthgrades = [];
+  let googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${req.query.doctor}`
+  let json = [];
+
   let hg = new Promise((resolve, reject) => {
-    rp(googleHGURL)
-      .then(function (html) {
+    rp(googleURL)
+      .then(function(html) {
         let data = JSON.parse(html)
-        url = data.items[0].link
-        rp(url)
+        for(var i = 0; i < 10; i++) {
+          if(data.items[i].link.match(/.www\.vitals\.com*?/) && data.items[i].link.match(/.\.html$/)) {
+            vitals.push(data.items[i].link)
+          }
+          if(data.items[i].link.match(/.www\.ratemds\.com*?/)) {
+            ratemds.push(data.items[i].link)
+          }
+          if(data.items[i].link.match(/.www\.healthgrades\.com*?/)) {
+            healthgrades.push(data.items[i].link)
+          }
+        }
+
+        rp(healthgrades[0])
           .then(function(data) {
-            json[0] = {doctor: "", total: "", rating: "", url: url};
+            json[0] = {doctor: "", total: "", rating: "", url: healthgrades[0]};
 
             let $ = cheerio.load(data);
 
@@ -31,45 +41,34 @@ router.get('/', function(req, res, next) {
             json[0].total = $('.review-count.js-profile-scroll-link').text()
             json[0].rating = $('.provider-rating-score').text()
 
-            rp(googleVURL)
-              .then(function (html) {
-                let data = JSON.parse(html)
-                url = data.items[0].link
-                rp(url)
-                  .then(function(data) {
-                    json[1] = {doctor: "", total: "", rating: "", url: url};
+            rp(vitals[0])
+              .then(function(data) {
+                json[1] = {doctor: "", total: "", rating: "", url: vitals[0]};
 
-                    let $ = cheerio.load(data);
+                let $ = cheerio.load(data);
 
-                    json[1].doctor = $('title').html()
-                    json[1].total = $('.rating-links').text()
-                    json[1].rating = $('.rating-text', '.valign.rating-5.count.center-align').text()
+                json[1].doctor = $('title').html()
+                json[1].total = $('.rating-links').text()
+                json[1].rating = $('.rating-text', '.valign.rating-5.count.center-align').text()
 
-                    resolve('success');
-                  })
-                  .catch(function (err) {
-                    // console.log(err)
-                    reject(err);
-                  })
+                resolve('success');
               })
-              .catch(function (err) {
+              .catch(function(err) {
                 // console.log(err)
                 reject(err);
-              });
+              })
           })
-          .catch(function (err) {
+          .catch(function(err) {
             console.log(err)
             reject(err);
           })
       })
-      .catch(function (err) {
+      .catch(function(err) {
         console.log(err)
         reject(err);
       });
   });
-  // let vitals = new Promise((resolve, reject) => {
 
-  // });
   hg.then((resolve) => {
     console.log(json);
     res.send(JSON.stringify(json));
