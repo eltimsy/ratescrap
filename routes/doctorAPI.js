@@ -20,7 +20,8 @@ router.get('/', function(req, res, next) {
       .then(function(html) {
         let data = JSON.parse(html)
         for(var i = 0; i < 10; i++) {
-          if(data.items[i].link.match(/\b.www\.vitals\.com.*reviews\b/)) {
+          console.log(data.items[i].link)
+          if(data.items[i].link.match(/.\bwww\.vitals\.com.*reviews\b/) || data.items[i].link.match(/.\bwww\.vitals\.com.*\.html\b/)) {
             vitals.push(data.items[i].link)
           }
           if(data.items[i].link.match(/.www\.ratemds\.com*?/)) {
@@ -30,7 +31,8 @@ router.get('/', function(req, res, next) {
             healthgrades.push(data.items[i].link)
           }
         }
-
+        console.log(vitals)
+        console.log(healthgrades)
         rp(healthgrades[0])
           .then(function(data) {
             json[0] = {doctor: "", total: "", rating: "", url: healthgrades[0]};
@@ -48,8 +50,8 @@ router.get('/', function(req, res, next) {
                 let $ = cheerio.load(data);
 
                 json[1].doctor = $('title').html()
-                json[1].total = $('.rating-links').text()
-                json[1].rating = $('.rating-text', '.valign.rating-5.count.center-align').text()
+                json[1].total = $('.card-subtitle').text()
+                json[1].rating = $('.rating-5.count', '.rating-text').text()
 
                 resolve('success');
               })
