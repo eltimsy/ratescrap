@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
       .then(function(html) {
         let data = JSON.parse(html)
         for(var i = 0; i < 10; i++) {
-          if(data.items[i].link.match(/.www\.vitals\.com*?/) && data.items[i].link.match(/.\.html$/)) {
+          if(data.items[i].link.match(/\b.www\.vitals\.com.*reviews\b/)) {
             vitals.push(data.items[i].link)
           }
           if(data.items[i].link.match(/.www\.ratemds\.com*?/)) {
