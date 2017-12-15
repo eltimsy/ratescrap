@@ -9,9 +9,7 @@ var cheerio = require('cheerio');
 router.get('/', function(req, res, next) {
   const secrets = req.app.get('secrets')
   let url = '';
-  let vitals = [];
-  let ratemds = [];
-  let healthgrades = [];
+  let urlList = {vitals: [], ratemds: [], healthgrades: []};
   let googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${req.query.doctor}`
   let json = [];
 
@@ -20,22 +18,20 @@ router.get('/', function(req, res, next) {
       .then(function(html) {
         let data = JSON.parse(html)
         for(var i = 0; i < 10; i++) {
-          console.log(data.items[i].link)
           if(data.items[i].link.match(/.\bwww\.vitals\.com.*reviews\b/) || data.items[i].link.match(/.\bwww\.vitals\.com.*\.html\b/)) {
-            vitals.push(data.items[i].link)
+            urlList.vitals.push(data.items[i].link)
           }
           if(data.items[i].link.match(/.www\.ratemds\.com*?/)) {
-            ratemds.push(data.items[i].link)
+            urlList.ratemds.push(data.items[i].link)
           }
           if(data.items[i].link.match(/.www\.healthgrades\.com*?/)) {
-            healthgrades.push(data.items[i].link)
+            urlList.healthgrades.push(data.items[i].link)
           }
         }
-        console.log(vitals)
-        console.log(healthgrades)
-        rp(healthgrades[0])
+
+        rp(urlList['healthgrades'][0])
           .then(function(data) {
-            json[0] = {doctor: "", total: "", rating: "", url: healthgrades[0]};
+            json[0] = {doctor: "", total: "", rating: "", url: urlList.healthgrades[0]};
 
             let $ = cheerio.load(data);
 
@@ -43,15 +39,15 @@ router.get('/', function(req, res, next) {
             json[0].total = $('.review-count.js-profile-scroll-link').text()
             json[0].rating = $('.provider-rating-score').text()
 
-            rp(vitals[0])
+            rp(urlList['vitals'][0])
               .then(function(data) {
-                json[1] = {doctor: "", total: "", rating: "", url: vitals[0]};
+                json[1] = {doctor: "", total: "", rating: "", url: urlList.vitals[0]};
 
                 let $ = cheerio.load(data);
 
                 json[1].doctor = $('title').html()
-                json[1].total = $('.card-subtitle').text()
-                json[1].rating = $('.rating-5.count', '.rating-text').text()
+                json[1].total = $('.card-subtitle', '.card-content.no-pad-bot').first().text()
+                json[1].rating = $('.rating-text', '.rating-5.count').text()
 
                 resolve('success');
               })
