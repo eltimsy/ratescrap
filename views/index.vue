@@ -2,8 +2,8 @@
   <div>
     <h1>Rate Scrapping Fun</h1>
     <form method=get v-on:submit.prevent="getData()">
-      <label>Doctor Name</label>
-      <input class="form-control" v-model="doctor" placeholder="doctor Name"><br>
+      <label>Please enter Doctor Name and Specialty</label>
+      <input class="form-control" v-model="doctor" placeholder="Name + Specialty"><br>
       <input class="btn btn-warning" type=submit value=Submit>
     </form>
     <br>

@@ -47,7 +47,12 @@ router.get('/', function(req, res, next) {
 
                 json[1].doctor = $('title').html()
                 json[1].total = $('.card-subtitle', '.card-content.no-pad-bot').first().text()
-                json[1].rating = $('.rating-text', '.rating-5.count').text()
+                if(json[1].total) {
+                  json[1].rating = $('.rating-text', '.rating-5.count').text()
+                } else {
+                  json[1].total = $('.rating-links').text()
+                  json[1].rating = $('.rating-text', '.valign.rating-5.count.center-align').first().text()
+                }
 
                 resolve('success');
               })
