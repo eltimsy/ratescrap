@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Rate Scrapping Fun</h1>
+    <h1>Doctor Rating Finder</h1>
     <form method=get v-on:submit.prevent="getData()">
       <label>Please enter Doctor Name and Specialty</label>
       <input class="form-control" v-model="doctor" placeholder="Name + Specialty"><br>

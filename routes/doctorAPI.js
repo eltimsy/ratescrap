@@ -54,7 +54,21 @@ router.get('/', function(req, res, next) {
                   json[1].rating = $('.rating-text', '.valign.rating-5.count.center-align').first().text()
                 }
 
-                resolve('success');
+                rp(urlList['ratemds'][0])
+                  .then(function(data) {
+                    json[2] = {doctor: "", total: "", rating: "", url: urlList.ratemds[0]};
+
+                    let $ = cheerio.load(data);
+
+                    json[2].doctor = $('title').html()
+                    json[2].total = $('.star-rating-count').first().text()
+                    json[2].rating = $('.star-rating').attr('title')
+
+                    resolve('success');
+                  })
+                  .catch(function(err) {
+                    reject(err);
+                  })
               })
               .catch(function(err) {
                 // console.log(err)
