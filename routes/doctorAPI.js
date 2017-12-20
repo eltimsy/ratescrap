@@ -88,93 +88,35 @@ router.get('/', function(req, res, next) {
   let url = '';
   let googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${req.query.doctor}`
 
-  let hg = new Promise((resolve, reject) => {
-    rp(googleURL)
-      .then(function(html) {
-        let data = JSON.parse(html)
-        for(var i = 0; i < 10; i++) {
-          if(data.items[i].link.match(/.\bwww\.vitals\.com.*reviews\b/) || data.items[i].link.match(/.\bwww\.vitals\.com.*\.html\b/)) {
-            urlList.vitals.push(data.items[i].link)
-          }
-          if(data.items[i].link.match(/.www\.ratemds\.com*?/)) {
-            urlList.ratemds.push(data.items[i].link)
-          }
-          if(data.items[i].link.match(/.www\.healthgrades\.com*?/)) {
-            urlList.healthgrades.push(data.items[i].link)
-          }
+  rp(googleURL)
+    .then(function(html) {
+      json = []
+      let data = JSON.parse(html)
+      for(var i = 0; i < 10; i++) {
+        if(data.items[i].link.match(/.\bwww\.vitals\.com.*reviews\b/) || data.items[i].link.match(/.\bwww\.vitals\.com.*\.html\b/)) {
+          urlList.vitals.push(data.items[i].link)
         }
+        if(data.items[i].link.match(/.www\.ratemds\.com*?/)) {
+          urlList.ratemds.push(data.items[i].link)
+        }
+        if(data.items[i].link.match(/.www\.healthgrades\.com*?/)) {
+          urlList.healthgrades.push(data.items[i].link)
+        }
+      }
 
-        getHG(req.query.healthgrades, () => {
-          getVitals(req.query.vitals, () => {
-            getRMD(req.query.ratemds, () => {
-              resolve('success');
-            });
+      getHG(req.query.healthgrades, () => {
+        getVitals(req.query.vitals, () => {
+          getRMD(req.query.ratemds, () => {
+            console.log(json);
+            res.send(JSON.stringify(json));
           });
         });
-        // rp(urlList['healthgrades'][0])
-        //   .then(function(data) {
-        //     json[0] = {doctor: "", total: "", rating: "", url: urlList.healthgrades[0]};
-
-        //     let $ = cheerio.load(data);
-
-        //     json[0].doctor = $('title').html()
-        //     json[0].total = $('.review-count.js-profile-scroll-link').text()
-        //     json[0].rating = $('.provider-rating-score').text()
-
-        //     rp(urlList['vitals'][0])
-        //       .then(function(data) {
-        //         json[1] = {doctor: "", total: "", rating: "", url: urlList.vitals[0]};
-
-        //         let $ = cheerio.load(data);
-
-        //         json[1].doctor = $('title').html()
-        //         json[1].total = $('.card-subtitle', '.card-content.no-pad-bot').first().text()
-        //         if(json[1].total) {
-        //           json[1].rating = $('.rating-text', '.rating-5.count').text()
-        //         } else {
-        //           json[1].total = $('.rating-links').text()
-        //           json[1].rating = $('.rating-text', '.valign.rating-5.count.center-align').first().text()
-        //         }
-
-        //         rp(urlList['ratemds'][0])
-        //           .then(function(data) {
-        //             json[2] = {doctor: "", total: "", rating: "", url: urlList.ratemds[0]};
-
-        //             let $ = cheerio.load(data);
-
-        //             json[2].doctor = $('title').html()
-        //             json[2].total = $('.star-rating-count').first().text()
-        //             json[2].rating = $('.star-rating').attr('title')
-
-        //             resolve('success');
-        //           })
-        //           .catch(function(err) {
-        //             reject(err);
-        //           })
-        //       })
-        //       .catch(function(err) {
-        //         // console.log(err)
-        //         reject(err);
-        //       })
-        //   })
-        //   .catch(function(err) {
-        //     console.log(err)
-        //     reject(err);
-        //   })
-      })
-      .catch(function(err) {
-        console.log(err)
-        reject(err);
       });
-  });
-
-  hg.then((resolve) => {
-    console.log(json);
-    res.send(JSON.stringify(json));
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+    })
+    .catch(function(err) {
+      console.log(err)
+      reject(err);
+    });
 
 });
 
