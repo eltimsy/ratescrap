@@ -1,26 +1,30 @@
 <template>
   <div>
-    <h1>Doctor Rating Finder</h1>
-    <form method=get v-on:submit.prevent="getData()">
-      <label>Please enter Doctor Name and Specialty</label>
-      <input class="form-control" v-model="doctor" placeholder="Name + Specialty"><br>
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" v-model="healthgrades">
-        Healthgrades
-      </label>
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" v-model="vitals">
-        Vitals
-      </label>
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" v-model="ratemds">
-        Ratemds
-      </label>
-      <input class="btn btn-warning" type=submit value=Submit>
-    </form>
-    <br>
+    <div class="jumbotron">
+      <h1 class="display-3">Doctor Rating Finder</h1>
+    </div>
+    <div class="container">
+      <form method=get v-on:submit.prevent="getData()">
+        <label>Please enter Doctor Name and Specialty</label>
+        <input class="form-control" v-model="doctor" placeholder="Name + Specialty"><br>
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" v-model="healthgrades">
+          Healthgrades
+        </label>
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" v-model="vitals">
+          Vitals
+        </label>
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" v-model="ratemds">
+          Ratemds
+        </label>
+        <input class="btn btn-warning" type=submit value=Submit>
+      </form>
+      <br>
+    </div>
     <div>
-      <h3>List of Ratings</h3>
+      <h1 class="display-4">List of Ratings</h1>
       <table class="table">
         <thead class="thead-dark">
           <tr>
@@ -74,4 +78,7 @@ export default {
 </script>
 
 <style lang="css">
+  .form-check-label {
+    padding-right: 1.25em;
+  }
 </style>
