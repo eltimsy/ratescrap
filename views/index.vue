@@ -81,4 +81,7 @@ export default {
   .form-check-label {
     padding-right: 1.25em;
   }
+  .display-4 {
+    text-align: center;
+  }
 </style>
