@@ -65,6 +65,34 @@ function getVitals(clicked, url, callback) {
 
 }
 
+function getYelp(clicked, url, callback) {
+  if(clicked === 'true') {
+    rp(url)
+    .then(function(data) {
+      let $ = cheerio.load(data);
+      let doctorURL = `https://www.yelp.com${$('.biz-name.js-analytics-click', '.indexed-biz-name').attr('href')}`;
+      rp(doctorURL)
+      .then(function (data) {
+        let $ = cheerio.load(data);
+
+        json.push({doctor: $('title').html(),
+                total: $('.review-count.rating-qualifier').first().text(),
+                rating: $('.i-stars.rating-very-large').attr('title'),
+                url: doctorURL})
+        return callback()
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+    })
+    .catch(function(error) {
+      console.log(error)
+    })
+  } else {
+    return callback()
+  }
+}
+
 
 router.get('/', function(req, res, next) {
   const secrets = req.app.get('secrets')
@@ -72,7 +100,13 @@ router.get('/', function(req, res, next) {
                       rmd: {total: '.star-rating-count', rating: '.star-rating', type: 'rmd'}}
   let url = '';
   let urlList = {vitals: [], ratemds: [], healthgrades: []};
-  let googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${req.query.doctor}`
+  let searchcity = ''
+  if(req.query.city !== 'false'){
+    searchcity = req.query.city.replace(/\s+/g, '+')
+  }
+  let googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${req.query.doctor}+${req.query.specialty}+${searchcity}`
+  let searchdoctor = req.query.doctor.replace(/\s+/g, '+')
+  let yelpURL = `https://www.yelp.com/search?find_desc=${searchdoctor}&find_loc=${searchcity}`
 
   rp(googleURL)
     .then(function(html) {
@@ -93,8 +127,10 @@ router.get('/', function(req, res, next) {
       getData(req.query.healthgrades, urlList['healthgrades'][0], scrapClasses.hg, () => {
         getVitals(req.query.vitals, urlList['vitals'][0], () => {
           getData(req.query.ratemds, urlList['ratemds'][0], scrapClasses.rmd,() => {
-            console.log(json);
-            res.send(JSON.stringify(json));
+            getYelp(req.query.yelp, yelpURL, () => {
+              console.log(json);
+              res.send(JSON.stringify(json));
+            });
           });
         });
       });

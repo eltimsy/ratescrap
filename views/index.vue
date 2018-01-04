@@ -5,19 +5,27 @@
     </div>
     <div class="container">
       <form method=get v-on:submit.prevent="getData()">
-        <label>Please enter Doctor Name and Specialty</label>
-        <input class="form-control" v-model="doctor" placeholder="Name + Specialty"><br>
+        <label>Please enter Doctor Name</label>
+        <input class="form-control" v-model="doctor" placeholder="Doctor Name"><br>
+        <label>Specialty</label>
+        <input class="form-control" v-model="specialty" placeholder="Specialty"><br>
+        <label>City</label>
+        <input class="form-control" v-model="city" placeholder="City"><br>
         <label class="form-check-label">
           <input class="form-check-input" type="checkbox" v-model="healthgrades">
           Healthgrades
         </label>
         <label class="form-check-label">
           <input class="form-check-input" type="checkbox" v-model="vitals">
-          Vitals
+          Vitals (requires specialty)
         </label>
         <label class="form-check-label">
           <input class="form-check-input" type="checkbox" v-model="ratemds">
           Ratemds
+        </label>
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" v-model="yelp">
+          Yelp (requires City)
         </label>
         <input class="btn btn-warning" type=submit value=Submit>
       </form>
@@ -53,10 +61,13 @@ export default {
   data: function() {
     return {
       doctor: '',
+      specialty: '',
+      city: '',
       values: '',
       healthgrades: false,
       vitals: false,
       ratemds: false,
+      yelp: false,
     }
   },
   methods: {
@@ -64,9 +75,12 @@ export default {
       axios.get('/doctorapi', {
         params: {
           doctor: this.doctor,
+          specialty: this.specialty,
+          city: this.city,
           healthgrades: this.healthgrades,
           vitals: this.vitals,
           ratemds: this.ratemds,
+          yelp: this.yelp,
         }
       }).then(response => {
         this.values = response.data;
