@@ -27,6 +27,10 @@
           <input class="form-check-input" type="checkbox" v-model="yelp">
           Yelp (requires City)
         </label>
+        <label class="form-check-label">
+          <input class="form-check-input" type="checkbox" v-model="places">
+          Places
+        </label>
         <input class="btn btn-warning" type=submit value=Submit>
       </form>
       <br>
@@ -68,6 +72,7 @@ export default {
       vitals: false,
       ratemds: false,
       yelp: false,
+      places: false,
     }
   },
   methods: {
@@ -81,6 +86,7 @@ export default {
           vitals: this.vitals,
           ratemds: this.ratemds,
           yelp: this.yelp,
+          places: this.places,
         }
       }).then(response => {
         this.values = response.data;

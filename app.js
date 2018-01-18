@@ -12,6 +12,9 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var doctorAPI = require('./routes/doctorAPI');
 const secrets = require('./config.js');
+const googleMapsClient = require('@google/maps').createClient({
+  key: secrets.GOOGLE_MAPS_API_KEY
+});
 
 var app = express();
 
@@ -28,6 +31,7 @@ app.use(expressVueMiddleware);
 
 app.set('sequelize', sequelize)
 app.set('secrets', secrets)
+app.set('googleMapsClient', googleMapsClient)
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));

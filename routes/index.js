@@ -9,6 +9,7 @@ var cheerio = require('cheerio');
 router.get('/', function(req, res, next) {
   const sequelize = req.app.get('sequelize')
   const secrets = req.app.get('secrets')
+
   // rp('https://www.yelp.com/search?find_desc=david+amato')
   //   .then(function(data) {
   //     let $ = cheerio.load(data);
