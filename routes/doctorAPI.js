@@ -70,20 +70,29 @@ function getYelp(clicked, url, callback) {
     rp(url)
     .then(function(data) {
       let $ = cheerio.load(data);
-      let doctorURL = `https://www.yelp.com${$('.biz-name.js-analytics-click', '.indexed-biz-name').attr('href')}`;
-      rp(doctorURL)
-      .then(function (data) {
-        let $ = cheerio.load(data);
+      let yelplink = $('.biz-name.js-analytics-click', '.indexed-biz-name').attr('href');
+      if(yelplink) {
+        let doctorURL = `https://www.yelp.com${yelplink}`;
+        rp(doctorURL)
+        .then(function (data) {
+          let $ = cheerio.load(data);
 
-        json.push({doctor: $('title').html(),
-                total: $('.review-count.rating-qualifier').first().text(),
-                rating: $('.i-stars.rating-very-large').attr('title'),
-                url: doctorURL})
+          json.push({doctor: $('title').html(),
+                  total: $('.review-count.rating-qualifier').first().text(),
+                  rating: $('.i-stars.rating-very-large').attr('title'),
+                  url: doctorURL})
+          return callback()
+        })
+        .catch(function(error) {
+          console.log(error)
+        })
+      } else {
+        json.push({doctor: 'Yelp no results',
+                total: '',
+                rating: '',
+                url: ''})
         return callback()
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
+      }
     })
     .catch(function(error) {
       console.log(error)
@@ -101,9 +110,14 @@ function getPlaces(clicked, url, secrets, callback) {
       rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${secrets.GOOGLE_MAPS_API_KEY}`)
         .then(function(data){
           const ratingdata = JSON.parse(data)
-          console.log(ratingdata.result.reviews.length)
+          const reviews = '';
+          try {
+            reviews = ratingdata.result.reviews.length;
+          }
+          catch(error) {
+          }
           json.push({doctor: ratingdata.result.name,
-                total: ratingdata.result.reviews.length,
+                total: reviews,
                 rating: ratingdata.result.rating,
                 url: ratingdata.result.url})
           return callback()
