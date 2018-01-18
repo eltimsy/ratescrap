@@ -9,7 +9,7 @@ const cheerio = require('cheerio');
 let json = [];
 
 function getData(clicked, url, scrapeVars, callback) {
-  if(clicked === 'true') {
+  if(clicked === 'true' && url) {
     rp(url)
       .then(function(data) {
 
@@ -39,7 +39,7 @@ function getData(clicked, url, scrapeVars, callback) {
 }
 
 function getVitals(clicked, url, callback) {
-  if(clicked === 'true') {
+  if(clicked === 'true' && url) {
     rp(url)
       .then(function(data) {
         json.push({doctor: "", total: "", rating: "", url: url});
@@ -110,11 +110,11 @@ function getPlaces(clicked, url, secrets, callback) {
       rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${secrets.GOOGLE_MAPS_API_KEY}`)
         .then(function(data){
           const ratingdata = JSON.parse(data)
-          const reviews = '';
-          try {
+          let reviews = ratingdata.result.reviews;
+          if(reviews) {
             reviews = ratingdata.result.reviews.length;
-          }
-          catch(error) {
+          } else {
+            reviews = 'none'
           }
           json.push({doctor: ratingdata.result.name,
                 total: reviews,
