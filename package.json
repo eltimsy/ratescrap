@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "babel": {
-    "presets": ["es2015"]
+    "presets": ["/node_modules/express_vue/node_modules/babel-preset-es2015"]
   },
   "scripts": {
     "start": "node ./bin/www"
