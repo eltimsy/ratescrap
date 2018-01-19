@@ -5,8 +5,7 @@ App uses a mix of google custom search and Cheerio/Request libraries to get data
 
 ## Setup Config:
 
-Place a file named config.js in the root directory.  Inside the file create an
-object named secrets and inside include all API keys.
+Create a .env file.  Add all the API keys to this file.
 
 ## API keys required:
 

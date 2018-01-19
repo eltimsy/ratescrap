@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -11,9 +12,8 @@ const sequelize = new Sequelize('postgres://localhost:5432/ttse', { operatorsAli
 var index = require('./routes/index');
 var users = require('./routes/users');
 var doctorAPI = require('./routes/doctorAPI');
-const secrets = require('./config.js');
 const googleMapsClient = require('@google/maps').createClient({
-  key: secrets.GOOGLE_MAPS_API_KEY
+  key: process.env.GOOGLE_MAPS_API_KEY
 });
 
 var app = express();
@@ -30,7 +30,6 @@ const expressVueMiddleware = expressVue.init(vueOptions);
 app.use(expressVueMiddleware);
 
 app.set('sequelize', sequelize)
-app.set('secrets', secrets)
 app.set('googleMapsClient', googleMapsClient)
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

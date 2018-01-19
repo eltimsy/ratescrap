@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config()
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
@@ -102,12 +103,12 @@ function getYelp(clicked, url, callback) {
   }
 }
 
-function getPlaces(clicked, url, secrets, callback) {
+function getPlaces(clicked, url, callback) {
   if(clicked === 'true') {
     rp(url)
     .then(function(data){
       const placedata = JSON.parse(data)
-      rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${secrets.GOOGLE_MAPS_API_KEY}`)
+      rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${process.env.GOOGLE_MAPS_API_KEY}`)
         .then(function(data){
           const ratingdata = JSON.parse(data)
           let reviews = ratingdata.result.reviews;
@@ -132,7 +133,6 @@ function getPlaces(clicked, url, secrets, callback) {
 }
 
 router.get('/', function(req, res, next) {
-  const secrets = req.app.get('secrets')
   const scrapClasses = { hg: {total: '.review-count.js-profile-scroll-link', rating: '.provider-rating-score', type: 'hg'},
                       rmd: {total: '.star-rating-count', rating: '.star-rating', type: 'rmd'}}
   let url = '';
@@ -141,10 +141,10 @@ router.get('/', function(req, res, next) {
   if(req.query.city !== 'false'){
     searchcity = req.query.city.replace(/\s+/g, '+')
   }
-  let googleURL = `https://www.googleapis.com/customsearch/v1?key=${secrets.GOOGLE_SEARCH_API_KEY}&cx=${secrets.GOOGLE_SEARCH_CX}&q=${req.query.doctor}+${req.query.specialty}+${searchcity}`
+  let googleURL = `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_SEARCH_API_KEY}&cx=${process.env.GOOGLE_SEARCH_CX}&q=${req.query.doctor}+${req.query.specialty}+${searchcity}`
   let searchdoctor = req.query.doctor.replace(/\s+/g, '+')
   let yelpURL = `https://www.yelp.com/search?find_desc=${searchdoctor}&find_loc=${searchcity}`
-  let placesURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchdoctor}+${req.query.specialty}+${req.query.city}&key=${secrets.GOOGLE_MAPS_API_KEY}`
+  let placesURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchdoctor}+${req.query.specialty}+${req.query.city}&key=${process.env.GOOGLE_MAPS_API_KEY}`
 
   rp(googleURL)
     .then(function(html) {
@@ -166,7 +166,7 @@ router.get('/', function(req, res, next) {
         getVitals(req.query.vitals, urlList['vitals'][0], () => {
           getData(req.query.ratemds, urlList['ratemds'][0], scrapClasses.rmd,() => {
             getYelp(req.query.yelp, yelpURL, () => {
-              getPlaces(req.query.places, placesURL, secrets, () => {
+              getPlaces(req.query.places, placesURL, () => {
                 console.log(json);
                 res.send(JSON.stringify(json));
               })
