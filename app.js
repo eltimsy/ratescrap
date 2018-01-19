@@ -43,8 +43,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33', '10.43.188.181'];
-app.use(ipfilter(ips, {mode: 'allow'}));
+// const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33', '10.43.188.181'];
+// app.use(ipfilter(ips, {mode: 'allow'}));
 
 app.use('/', index);
 app.use('/users', users);
@@ -57,21 +57,21 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, _next) {
-    console.log('Error handler', err);
-    if(err instanceof IpDeniedError){
-      res.status(401);
-    }else{
-      res.status(err.status || 500);
-    }
+// if (app.get('env') === 'development') {
+//   app.use(function(err, req, res, _next) {
+//     console.log('Error handler', err);
+//     if(err instanceof IpDeniedError){
+//       res.status(401);
+//     }else{
+//       res.status(err.status || 500);
+//     }
 
-    res.renderVue('error', {
-      message: 'You shall not pass',
-      error: err
-    });
-  });
-}
+//     res.renderVue('error', {
+//       message: 'You shall not pass',
+//       error: err
+//     });
+//   });
+// }
 
 // error handler
 app.use(function(err, req, res, next) {
