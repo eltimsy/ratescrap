@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33'];
+const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33', '10.43.188.181'];
 app.use(ipfilter(ips, {mode: 'allow'}));
 
 app.use('/', index);
