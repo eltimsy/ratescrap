@@ -111,12 +111,17 @@ function getPlaces(clicked, url, callback) {
       rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${process.env.GOOGLE_MAPS_API_KEY}`)
         .then(function(data){
           const ratingdata = JSON.parse(data)
-          let reviews = ratingdata.result.reviews;
-          if(reviews) {
+          let reviews = 'none'
+          try {
             reviews = ratingdata.result.reviews.length;
-          } else {
-            reviews = 'none'
           }
+          catch(error) {
+          }
+          // if(reviews) {
+          //   reviews = ratingdata.result.reviews.length;
+          // } else {
+          //   reviews = 'none'
+          // }
           json.push({doctor: ratingdata.result.name,
                 total: reviews,
                 rating: ratingdata.result.rating,
