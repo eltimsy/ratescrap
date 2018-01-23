@@ -108,10 +108,9 @@ function getPlaces(clicked, url, callback) {
     rp(url)
     .then(function(data){
       const placedata = JSON.parse(data)
-      rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${process.env.GOOGLE_MAPS_API_KEY}`)
+      rp(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placedata.results[0].place_id}&key=${process.env.GOOGLE_PLACES_API_KEY}`)
         .then(function(data){
           const ratingdata = JSON.parse(data)
-          console.log(ratingdata)
           let reviews = 'none'
           try {
             reviews = ratingdata.result.reviews.length;
