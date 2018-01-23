@@ -144,7 +144,7 @@ router.get('/', function(req, res, next) {
   let googleURL = `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_SEARCH_API_KEY}&cx=${process.env.GOOGLE_SEARCH_CX}&q=${req.query.doctor}+${req.query.specialty}+${searchcity}`
   let searchdoctor = req.query.doctor.replace(/\s+/g, '+')
   let yelpURL = `https://www.yelp.com/search?find_desc=${searchdoctor}&find_loc=${searchcity}`
-  let placesURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchdoctor}+${req.query.specialty}+${req.query.city}&key=${process.env.GOOGLE_MAPS_API_KEY}`
+  let placesURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${searchdoctor}+${req.query.specialty}+${req.query.city}&key=${process.env.GOOGLE_PLACES_API_KEY}`
 
   rp(googleURL)
     .then(function(html) {
