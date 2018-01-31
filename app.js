@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const expressVue = require('express-vue');
 const ipfilter = require('express-ipfilter').IpFilter;
 const IpDeniedError = require('express-ipfilter').IpDeniedError;
+const passport = require('passport')
+const session = require('express-session')
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_HOST, { operatorsAliases: false });
 
@@ -35,11 +37,14 @@ const expressVueMiddleware = expressVue.init(vueOptions);
 app.use(expressVueMiddleware);
 app.set('sequelize', sequelize)
 app.set('googleMapsClient', googleMapsClient)
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(express.static("public"));
+app.use(session({ screts: "awesomesauce" }));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
