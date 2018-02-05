@@ -19,7 +19,8 @@ router.get('/', function(req, res, next) {
   //     console.log(error)
   //   })
   const data = {
-    stuff: 'abc'
+    stuff: 'abc',
+    user: req.user
   };
   const vueOptions = {
     head: {
