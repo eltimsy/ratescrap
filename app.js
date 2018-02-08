@@ -16,7 +16,8 @@ const sequelize = new Sequelize(process.env.DB_HOST, { operatorsAliases: false }
 const index = require('./routes/index');
 const users = require('./routes/users');
 const login = require('./routes/login');
-const doctorAPI = require('./routes/doctorAPI');
+const doctorAPI = require('./routes/api/doctorAPI');
+const loginAPI = require('./routes/api/loginAPI')
 const googleMapsClient = require('@google/maps').createClient({
   key: process.env.GOOGLE_MAPS_API_KEY
 });
@@ -55,6 +56,7 @@ app.use('/', index);
 app.use('/login', login);
 app.use('/users', users);
 app.use('/doctorapi', doctorAPI);
+app.use('/loginAPI', loginAPI);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
