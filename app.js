@@ -15,12 +15,12 @@ const sequelize = new Sequelize(process.env.DB_HOST, { operatorsAliases: false }
 
 const index = require('./routes/index');
 const users = require('./routes/users');
-const login = require('./routes/login');
 const doctorAPI = require('./routes/api/doctorAPI');
-const loginAPI = require('./routes/api/loginAPI')
 const googleMapsClient = require('@google/maps').createClient({
   key: process.env.GOOGLE_MAPS_API_KEY
 });
+
+require('./authenticate/init')(passport);
 
 var ip = require('ip');
 console.log(ip.address())
@@ -49,6 +49,9 @@ app.use(passport.session());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const login = require('./routes/login')(passport);
+// const loginAPI = require('./routes/api/loginAPI')(passport);
+
 // const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33', '10.43.188.181'];
 // app.use(ipfilter(ips, {mode: 'allow'}));
 
@@ -56,7 +59,8 @@ app.use('/', index);
 app.use('/login', login);
 app.use('/users', users);
 app.use('/doctorapi', doctorAPI);
-app.use('/loginAPI', loginAPI);
+// app.use('/loginAPI', loginAPI);
+// require('./routes/api/loginAPI')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -73,7 +77,14 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.renderVue('error');
+  const vueOptions = {
+    head: {
+      meta: [
+        { script: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.8/vue.min.js' },
+      ]
+    }
+  }
+  res.renderVue('error', vueOptions);
 });
 
 module.exports = app;
