@@ -20,10 +20,6 @@ const googleMapsClient = require('@google/maps').createClient({
   key: process.env.GOOGLE_MAPS_API_KEY
 });
 
-require('./authenticate/init')(passport);
-
-var ip = require('ip');
-console.log(ip.address())
 const app = express();
 
 // view engine setup
@@ -49,8 +45,8 @@ app.use(passport.session());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+require('./authenticate/init')(passport);
 const login = require('./routes/login')(passport);
-// const loginAPI = require('./routes/api/loginAPI')(passport);
 
 // const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33', '10.43.188.181'];
 // app.use(ipfilter(ips, {mode: 'allow'}));
@@ -59,8 +55,6 @@ app.use('/', index);
 app.use('/login', login);
 app.use('/users', users);
 app.use('/doctorapi', doctorAPI);
-// app.use('/loginAPI', loginAPI);
-// require('./routes/api/loginAPI')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
