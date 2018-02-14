@@ -9,14 +9,6 @@ router.get('/', require('connect-ensure-login').ensureLoggedIn(), function(req, 
   const sequelize = req.app.get('sequelize')
   const secrets = req.app.get('secrets')
 
-  // rp('https://www.yelp.com/search?find_desc=david+amato')
-  //   .then(function(data) {
-  //     let $ = cheerio.load(data);
-  //     console.log($('.biz-name.js-analytics-click', '.indexed-biz-name').attr('href'))
-  //   })
-  //   .catch(function(error) {
-  //     console.log(error)
-  //   })
   const data = {
     stuff: 'abc',
   };

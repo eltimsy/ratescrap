@@ -7,8 +7,6 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressVue = require('express-vue');
-const ipfilter = require('express-ipfilter').IpFilter;
-const IpDeniedError = require('express-ipfilter').IpDeniedError;
 const passport = require('passport')
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_HOST, { operatorsAliases: false });
@@ -47,9 +45,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require('./authenticate/init')(passport);
 const login = require('./routes/login')(passport);
-
-// const ips = ['::ffff:127.0.0.1', '::1', '74.213.184.33', '10.43.188.181'];
-// app.use(ipfilter(ips, {mode: 'allow'}));
 
 app.use('/', index);
 app.use('/login', login);
