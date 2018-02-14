@@ -1,8 +1,9 @@
+require('dotenv').config()
 
 const Strategy = require('passport-local').Strategy
 const records = [
-      { id: 1, username: 'admin', password: 'superadmin', displayName: 'admin', emails: [ { value: 'admin@example.com' } ] }
-    , { id: 2, username: 'crazy', password: 'crazyman', displayName: 'crazy', emails: [ { value: 'crazy@example.com' } ] }
+      { id: 1, username: 'admin', password: process.env.ADMIN_PASS, displayName: 'admin', emails: [ { value: 'admin@example.com' } ] }
+    , { id: 2, username: 'crazy', password: process.env.CRAZY_PASS, displayName: 'crazy', emails: [ { value: 'crazy@example.com' } ] }
   ];
 
 function findByUsername(username, cb) {
