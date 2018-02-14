@@ -1,7 +1,8 @@
 <template>
   <div class="text-center" style="padding:50px 0">
-    <div class="logo">login</div>
+    <div class="h3">login</div>
     <div class="login-form-1">
+      <div class="alert alert-danger" role="alert" v-if="errormessage">{{ errormessage }}</div>
       <form method=post v-on:submit.prevent="Login()" id="login-form" class="text-left">
         <div class="login-form-main-message"></div>
         <div class="main-login-form">
@@ -33,6 +34,7 @@ export default {
     return {
       username: '',
       password: '',
+      errormessage: '',
     }
   },
   methods: {
@@ -41,7 +43,11 @@ export default {
         username: this.username,
         password: this.password,
       }).then(response => {
-        console.log(response.data)
+        if(response.data === "ok") {
+          window.location.href = "/";
+        }
+      }).catch(error => {
+        this.errormessage = error.response.data
       })
     }
   }
